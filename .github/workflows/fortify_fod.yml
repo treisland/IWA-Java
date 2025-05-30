@@ -67,7 +67,7 @@ jobs:
           FOD_TENANT: ${{secrets.FOD_TENANT}}              # Either tenant/user/password or client id/secret are required;
           FOD_USER: ${{secrets.FOD_USER}}                  # these should be configured through GitHub secrets.
           FOD_PASSWORD: ${{secrets.FOD_PASSWORD}}
-          FOD_CLIENT_ID: ${{secrets.FOD_CLIENT_ID}}
+          #FOD_CLIENT_ID: ${{secrets.FOD_CLIENT_ID}}
           #FOD_CLIENT_SECRET: ${{secrets.FOD_CLIENT_SECRET}}
           ### Optional configuration
           # FOD_LOGIN_EXTRA_OPTS: --socket-timeout=60s     # Extra 'fcli fod session login' options
