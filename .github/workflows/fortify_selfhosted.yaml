@@ -35,6 +35,7 @@ jobs:
         run:
           fcli fod session login --url $FOD_URL --client-id $FOD_CLIENT_ID --client-secret $FOD_CLIENT_SECRET &&
           fcli tool sc-client run package &&
+          fcli fod sast start --release $FOD_RELEASE -f fortifypackage.zip &&
           fcli fod session logout
         env:
           FOD_URL: https://ams.fortify.com
