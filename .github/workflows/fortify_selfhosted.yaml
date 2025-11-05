@@ -32,10 +32,11 @@ jobs:
 
       # Perform Fortify on Demand SAST + SCA scan and import SAST results into GitHub code scanning alerts
       - name: Run FoD SAST Scan
-        uses: fortify/github-action@v2
-        with:
-          sast-scan: true
-          debricked-sca-scan: true
+        run:
+          fcli tool sc-client run package
+          fcli fod session login
+          fcli fod sast start --release $FOD_RELEASE -f fortifypackage.zip
+          fcli fod session logout
         env:
           FOD_URL: https://ams.fortify.com
           FOD_CLIENT_ID: ${{secrets.FOD_CLIENT_ID}}
