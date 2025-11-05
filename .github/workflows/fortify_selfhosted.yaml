@@ -1,0 +1,50 @@
+################################################################################################################################################
+# Fortify lets you build secure software fast with an appsec platform that automates testing throughout the DevSecOps pipeline. Fortify static,#
+# dynamic, interactive, and runtime security testing is available on premises or as a service. To learn more about Fortify, start a free trial #
+# or contact our sales team, visit microfocus.com/appsecurity.                                                                                 #
+#                                                                                                                                              #
+# Use this workflow template as a basis for integrating Fortify on Demand Static Application Security Testing(SAST) into your GitHub workflows.#
+# This template demonstrates the steps to prepare the code+dependencies, initiate a scan, download results once complete and import into       #
+# GitHub Security Code Scanning Alerts. Existing customers should review inputs and environment variables below to configure scanning against  #
+# an existing application in your Fortify on Demand tenant. Additional information is available in the comments throughout the workflow, the   #
+# documentation for the Fortify actions used, and the Fortify on Demand / ScanCentral Client product documentation. If you need additional     #
+# assistance with configuration, feel free to create a help ticket in the Fortify on Demand portal.                                            #
+################################################################################################################################################
+
+name: Fortify AST Scan Self-Hosted
+
+on:
+  workflow_dispatch:
+
+jobs:
+  Fortify-AST-Scan:
+    runs-on: self-hosted
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+      pull-requests: write
+      
+    steps:
+      # Check out source code
+      - name: Check Out Source Code
+        uses: actions/checkout@v4
+
+      # Perform Fortify on Demand SAST + SCA scan and import SAST results into GitHub code scanning alerts
+      - name: Run FoD SAST Scan
+        uses: fortify/github-action@v2
+        with:
+          sast-scan: true
+          debricked-sca-scan: true
+        env:
+          FOD_URL: https://ams.fortify.com
+          FOD_CLIENT_ID: ${{secrets.FOD_CLIENT_ID}}
+          FOD_CLIENT_SECRET: ${{secrets.FOD_CLIENT_SECRET}}
+          FOD_RELEASE: ${{secrets.FOD_RELEASE}}
+          DO_EXPORT: true
+          DO_SETUP: true
+          SETUP_EXTRA_OPTS: --copy-from "${{ github.repository }}:${{ github.event.repository.default_branch }}"
+          DO_JOB_SUMMARY: true
+          DO_PR_COMMENT: true
+          DO_WAIT: true
+          #DO_POLICY_CHECK: true
